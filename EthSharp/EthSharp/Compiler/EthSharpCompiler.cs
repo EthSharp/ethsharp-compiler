@@ -27,13 +27,13 @@ namespace EthSharp.Compiler
             var classDeclarationSyntax = (ClassDeclarationSyntax) rootClass;
 
             //create a dictionary of some hash from functionname so that functions can be called just like solidity
-            var byteTest = new byte[4] {0x0, 0x0, 0x0, 0x1};
 
 
             //asuming that we have any functions, create the evm code to read the function as sent...
 
-            foreach (var method in classDeclarationSyntax.Members.Where(x=>x is MethodDeclarationSyntax))
+            foreach (var method in classDeclarationSyntax.GetMethods())
             {
+                string test = method.GetExternalSignature();
                 //it seems like here we compose some kind of conditional that decides which command to execute. 
 
                 //if it matches one, it sends the request to the required code 
