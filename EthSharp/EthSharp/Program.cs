@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EthSharp.Compiler;
+using HashLib;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace EthSharp

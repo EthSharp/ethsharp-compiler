@@ -2,6 +2,8 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Security.Cryptography;
+using HashLib;
 
 namespace EthSharp.Compiler
 {
@@ -17,12 +19,16 @@ namespace EthSharp.Compiler
 
         public EthSharpAssembly Create(SyntaxTree root)
         {
+            //ETHEREUM IS BIG ENDIAN - C# doesn't define so we can just convert after
+
             //for now just assume one class
             var rootClass = root.GetRoot().ChildNodes().FirstOrDefault(); // cast as class type
             InitializeContext();
             var classDeclarationSyntax = (ClassDeclarationSyntax) rootClass;
 
             //create a dictionary of some hash from functionname so that functions can be called just like solidity
+            var byteTest = new byte[4] {0x0, 0x0, 0x0, 0x1};
+
 
             //asuming that we have any functions, create the evm code to read the function as sent...
 

@@ -2,11 +2,18 @@
 {
     public class EthSharpCompilerContext
     {
+        private int _tagCount;
         public EthSharpAssembly Assembly { get; set; }
 
         public EthSharpCompilerContext()
         {
             Assembly = new EthSharpAssembly();
+            _tagCount = 1;
+        }
+
+        public int GetNewTag()
+        {
+            return _tagCount++;
         }
 
         public void Append(int value)
