@@ -14,13 +14,13 @@ namespace EthSharp
         static void Main(string[] args)
         {
             string source = @"public class SimpleStorage {
-                private int storedData;
+                private UInt256 storedData;
 
-                public void Set(int x) {
+                public void Set(UInt256 x) {
                     storedData = x;
                 }
 
-                public int Get(){
+                public UInt256 Get(){
                     return storedData;
                 }
             }";
