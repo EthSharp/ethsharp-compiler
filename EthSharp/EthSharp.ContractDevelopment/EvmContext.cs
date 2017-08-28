@@ -10,6 +10,8 @@ namespace EthSharp.ContractDevelopment
     {
         public static Block CurrentBlock { get; set; }
 
+        public static Message Message { get; set; }
+
         public static string Keccak256()
         {
             throw  new NotImplementedException();

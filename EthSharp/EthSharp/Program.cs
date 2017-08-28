@@ -13,16 +13,16 @@ namespace EthSharp
         static void Main(string[] args)
         {
             string source = @"public class SimpleStorage {
-    private int storedData;
+                private int storedData;
 
-    public void Set(int x) {
-        storedData = x;
-    }
+                public void Set(int x) {
+                    storedData = x;
+                }
 
-    public int Get(){
-        return storedData;
-    }
-}";
+                public int Get(){
+                    return storedData;
+                }
+            }";
             //parse tree - create assembly then emit.
 
             var tree = SyntaxFactory.ParseSyntaxTree(source);
