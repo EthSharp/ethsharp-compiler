@@ -112,6 +112,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\EthSharpAssembly.cs" />
+    <Compile Include="Compiler\EthSharpAssemblyItem.cs" />
+    <Compile Include="Compiler\EthSharpCompiler.cs" />
+    <Compile Include="Compiler\EthSharpCompilerContext.cs" />
+    <Compile Include="Compiler\EvmInstruction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

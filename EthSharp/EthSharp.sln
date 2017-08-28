@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EthSharp", "EthSharp\EthSharp.csproj", "{3CD54C5E-F003-4360-84E0-09C890DB2AE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EthSharp.ContractDevelopment", "EthSharp.ContractDevelopment\EthSharp.ContractDevelopment.csproj", "{563191F1-6BBC-4ED8-BC39-2CAA50AE51DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{3CD54C5E-F003-4360-84E0-09C890DB2AE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CD54C5E-F003-4360-84E0-09C890DB2AE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CD54C5E-F003-4360-84E0-09C890DB2AE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{563191F1-6BBC-4ED8-BC39-2CAA50AE51DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{563191F1-6BBC-4ED8-BC39-2CAA50AE51DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{563191F1-6BBC-4ED8-BC39-2CAA50AE51DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{563191F1-6BBC-4ED8-BC39-2CAA50AE51DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
