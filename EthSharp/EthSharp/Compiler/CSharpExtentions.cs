@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EthSharp.Hashing;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace EthSharp.Compiler
@@ -27,6 +28,11 @@ namespace EthSharp.Compiler
                     toReturn += ",";
             }
             return toReturn + ")";
+        }
+
+        public static byte[] GetAbiSignature(this MethodDeclarationSyntax method)
+        {
+            return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes();
         }
     }
 }

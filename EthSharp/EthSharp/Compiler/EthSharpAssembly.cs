@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using EthSharp.ContractDevelopment;
 
 namespace EthSharp.Compiler
 {
@@ -23,7 +24,7 @@ namespace EthSharp.Compiler
             Items.Add(assemblyItem);
         }
 
-        public void Append(int value)
+        public void Append(UInt256 value)
         {
             Items.Add(new EthSharpAssemblyItem(value));
         }

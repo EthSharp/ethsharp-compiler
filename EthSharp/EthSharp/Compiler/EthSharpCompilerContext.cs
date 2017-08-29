@@ -1,4 +1,6 @@
-﻿namespace EthSharp.Compiler
+﻿using EthSharp.ContractDevelopment;
+
+namespace EthSharp.Compiler
 {
     public class EthSharpCompilerContext
     {
@@ -16,7 +18,7 @@
             return _tagCount++;
         }
 
-        public void Append(int value)
+        public void Append(UInt256 value)
         {
             Assembly.Append(value);
         }

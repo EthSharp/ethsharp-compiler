@@ -1,4 +1,6 @@
-﻿namespace EthSharp.Compiler
+﻿using EthSharp.ContractDevelopment;
+
+namespace EthSharp.Compiler
 {
     public class EthSharpAssemblyItem
     {
@@ -13,12 +15,12 @@
 
         //private SourceLocation _sourceLocation;
         public EvmInstruction Instruction { get; private set; }
-        public int Data { get; set; }
+        public UInt256 Data { get; set; }
         public JumpType ItemJumpType { get; set; } = JumpType.Ordinary;
 
         //NOTE: We are ignoring sourceLocation for now
 
-        public EthSharpAssemblyItem(int push) : this(AssemblyItemType.Push, push) {}
+        public EthSharpAssemblyItem(UInt256 push) : this(AssemblyItemType.Push, push) {}
 
         public EthSharpAssemblyItem(EvmInstruction i)
         {
@@ -26,11 +28,11 @@
             Instruction = i;
         }
 
-        public EthSharpAssemblyItem(AssemblyItemType type, int data)
+        public EthSharpAssemblyItem(AssemblyItemType type, UInt256 data)
         {
             Type = type;
             if (type == AssemblyItemType.Operation)
-                Instruction = (EvmInstruction) data; //this is silly - should never get here.
+                Instruction = (EvmInstruction)data.ToInt(); //this is silly - should never get here.
             else
                 Data = data;
         }

@@ -157,6 +157,11 @@ namespace EthSharp.ContractDevelopment
             return new BigInteger(buffer);
         }
 
+        public int ToInt()
+        {
+            return (int) ToBigInteger();
+        }
+
         public int CompareTo(UInt256 other)
         {
             for (var i = 0; i < width; i++)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -21,17 +22,18 @@ namespace EthSharp.Compiler
         public EthSharpAssembly Create(SyntaxTree root)
         {
             //for now just assume one class
-            var rootClass = root.GetRoot().ChildNodes().FirstOrDefault(); // cast as class type
+            var rootClass = root.GetRoot().ChildNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault(); // cast as class type
             InitializeContext();
             var classDeclarationSyntax = (ClassDeclarationSyntax) rootClass;
-
-            //create a dictionary of some hash from functionname so that functions can be called just like solidity
+            Dictionary<byte[], MethodDeclarationSyntax> methodNames = classDeclarationSyntax.GetMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
+            RetrieveFunctionHash();
 
 
             //asuming that we have any functions, create the evm code to read the function as sent...
 
             foreach (var method in classDeclarationSyntax.GetMethods())
             {
+
                 //string test = method.GetExternalSignature();
                 //it seems like here we compose some kind of conditional that decides which command to execute. 
 
@@ -51,6 +53,30 @@ namespace EthSharp.Compiler
             throw new NotImplementedException();
         }
 
+
+
+        private void RetrieveFunctionHash()
+        {
+            Context.Append(UInt256.Zero);
+            Context.Append(EvmInstruction.CALLDATALOAD);
+            Context.Append(new UInt256(new byte[]
+            {
+                0,0,0,1,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0
+            })); //what are these values?
+            Context.Append(EvmInstruction.SWAP1);
+            Context.Append(EvmInstruction.DIV);
+            Context.Append(new UInt256(new byte[]
+            {
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,0,
+                255,255,255,255,255,255,255,255
+            })); //and here
+            Context.Append(EvmInstruction.AND);
+        }
 
         //Would probably rather not even use now whilst I don't understand what this does - I think it's the
         //packaging that stops the bytecode being removed after use but I'm not sure
