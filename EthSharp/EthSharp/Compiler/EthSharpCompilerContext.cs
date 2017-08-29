@@ -28,6 +28,11 @@ namespace EthSharp.Compiler
             Assembly.Append(instruction);
         }
 
+        public void Append(EthSharpAssemblyItem item)
+        {
+            Assembly.Append(item);
+        }
+
         //public void Append(byte[] value)
         //{
         //    Assembly.Append(value);

@@ -21,32 +21,32 @@ namespace EthSharp.Compiler
 
         public EthSharpAssembly Create(SyntaxTree root)
         {
-            //for now just assume one class
+            // for now just assume one class
             var rootClass = root.GetRoot().ChildNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault(); // cast as class type
             InitializeContext();
             var classDeclarationSyntax = (ClassDeclarationSyntax) rootClass;
-            Dictionary<byte[], MethodDeclarationSyntax> methodNames = classDeclarationSyntax.GetMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
+            Dictionary<byte[], MethodDeclarationSyntax> methods = classDeclarationSyntax.GetMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
+            Dictionary<byte[], EthSharpAssemblyItem> methodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
             RetrieveFunctionHash();
 
-
-            //asuming that we have any functions, create the evm code to read the function as sent...
-
-            foreach (var method in classDeclarationSyntax.GetMethods())
+            // If incoming call data matches function, jump to that function.
+            foreach (var method in methods)
             {
-
-                //string test = method.GetExternalSignature();
-                //it seems like here we compose some kind of conditional that decides which command to execute. 
-
-                //if it matches one, it sends the request to the required code 
+                methodEntryPoints.Add(method.Key, new EthSharpAssemblyItem(Context.GetNewTag()));
+                Context.Append(EvmInstruction.DUP1);
+                Context.Append(new UInt256(method.Key));
+                Context.Append(EvmInstruction.EQ);
+                Context.Append(methodEntryPoints[method.Key]);
+                Context.Append(EvmInstruction.JUMPI);
             }
 
-            //add invalid instruction - no fallbacks for now
+            // if we reached here (bottom of the function list) - no function hashes were matched, so fail.
+            // if fallback was to be implemented, it would happen here.
+            Context.Append(EvmInstruction.INVALID);
 
-            foreach (var method in classDeclarationSyntax.Members.Where(x => x is MethodDeclarationSyntax))
+            foreach (var method in methods)
             {
-                //here, build addresses and actual logic - use go to from above to get here
-
-                //will always end by appending Instruction.Stop or Instruction.Return
+                //build actual method logic - end by appending Instruction.Stop or Instruction.Return;
             }
 
 

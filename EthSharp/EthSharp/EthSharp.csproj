@@ -142,6 +142,7 @@
     <Compile Include="Compiler\EthSharpAssemblyItem.cs" />
     <Compile Include="Compiler\EthSharpCompiler.cs" />
     <Compile Include="Compiler\EthSharpCompilerContext.cs" />
+    <Compile Include="Compiler\EvmByteCode.cs" />
     <Compile Include="Compiler\EvmInstruction.cs" />
     <Compile Include="Hashing\HashHelper.cs" />
     <Compile Include="Program.cs" />

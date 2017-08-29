@@ -9,5 +9,6 @@ namespace EthSharp.ContractDevelopment
     public class Message
     {
         public Address Sender { get; set; }
+        public UInt256 Value { get; set; }
     }
 }

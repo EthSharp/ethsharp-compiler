@@ -8,6 +8,10 @@ namespace EthSharp.ContractDevelopment
 {
     public class Address
     {
+        public UInt256 Balance { get; set; }
         
+
+
+        //Methods for send!
     }
 }
