@@ -49,7 +49,7 @@ namespace EthSharp.Compiler
                 //build actual method logic - end by appending Instruction.Stop or Instruction.Return;
             }
 
-
+            var test = Context.Assembly.Assemble();
             throw new NotImplementedException();
         }
 

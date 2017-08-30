@@ -31,13 +31,15 @@ namespace EthSharp.Compiler
                     }
                     case AssemblyItemType.Push:
                     {
+                        ret.ByteCode.Add((byte)EvmInstruction.PUSH1);
+                        ret.ByteCode.Add((byte)item.Data.ToInt());
+                        //    item.Data
                         //byte b = max<unsigned>(1, dev::bytesRequired(i.data()));
                         //ret.bytecode.push_back((byte)Instruction::PUSH1 - 1 + b);
                         //ret.bytecode.resize(ret.bytecode.size() + b);
                         //bytesRef byr(&ret.bytecode.back() + 1 - b, b);
                         //toBigEndian(i.data(), byr);
-                        //break;
-                        throw new NotImplementedException();
+                        break;
                     }
                     case AssemblyItemType.PushTag:
                     {
