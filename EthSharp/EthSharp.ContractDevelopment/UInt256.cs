@@ -22,15 +22,15 @@ namespace EthSharp.ContractDevelopment
         {
             get
             {
-                var bytes = this.ToByteArray();
-                int length = 32;
-                while (bytes[length - 1] == 0)
+                var bytes = this.ToByteArrayBE();
+                int offset = 0;
+                while (bytes[offset] == 0)
                 {
-                    if (length == 1)
+                    if (offset == 31)
                         break;
-                    length--;
+                    offset++;
                 }
-                return length;
+                return 32 - offset;
             }
         }
 

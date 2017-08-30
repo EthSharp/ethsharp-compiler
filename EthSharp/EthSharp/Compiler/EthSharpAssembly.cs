@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EthSharp.ContractDevelopment;
 
 namespace EthSharp.Compiler
@@ -20,7 +21,6 @@ namespace EthSharp.Compiler
             EvmByteCode ret = new EvmByteCode();
             foreach (var item in Items)
             {
-                Console.WriteLine(item.Data.ByteLength);
                 switch (item.Type)
                 {
                     case AssemblyItemType.Operation:
@@ -34,8 +34,11 @@ namespace EthSharp.Compiler
                     }
                     case AssemblyItemType.Push:
                     {
-                        ret.ByteCode.Add((byte)EvmInstruction.PUSH1);
-                        ret.ByteCode.Add((byte)item.Data.ToInt());
+                        int length = item.Data.ByteLength;
+                        var sizedPushInstruction = EvmInstruction.PUSH1 - 1 + length;
+                        
+                        ret.ByteCode.Add((byte)sizedPushInstruction);
+                        ret.ByteCode.AddRange(item.Data.ToByteArrayBE().Skip(32-length).Take(length));
                         break;
                     }
                     case AssemblyItemType.PushTag:
@@ -81,6 +84,7 @@ namespace EthSharp.Compiler
                         throw new NotImplementedException();
                 }
             }
+            Console.WriteLine(ByteArrayToString(ret.ByteCode.ToArray()));
             throw new NotImplementedException();
         }
 
@@ -104,6 +108,12 @@ namespace EthSharp.Compiler
         public void Append(EvmInstruction instruction)
         {
             Items.Add(new EthSharpAssemblyItem(instruction));
+        }
+
+        public static string ByteArrayToString(byte[] ba)
+        {
+            string hex = BitConverter.ToString(ba);
+            return hex.Replace("-", "");
         }
 
         //public void Append(byte[] value)

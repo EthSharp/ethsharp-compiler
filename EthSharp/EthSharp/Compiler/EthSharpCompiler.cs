@@ -24,7 +24,7 @@ namespace EthSharp.Compiler
             // for now just assume one class
             var rootClass = root.GetRoot().ChildNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault(); // cast as class type
             InitializeContext();
-            var classDeclarationSyntax = (ClassDeclarationSyntax) rootClass;
+            var classDeclarationSyntax = rootClass;
             Dictionary<byte[], MethodDeclarationSyntax> methods = classDeclarationSyntax.GetMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
             Dictionary<byte[], EthSharpAssemblyItem> methodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
             RetrieveFunctionHash();
@@ -59,7 +59,7 @@ namespace EthSharp.Compiler
         {
             Context.Append(UInt256.Zero);
             Context.Append(EvmInstruction.CALLDATALOAD);
-            Context.Append(new UInt256(new byte[]
+            Context.Append(UInt256.FromByteArrayBE(new byte[]
             {
                 0,0,0,1,0,0,0,0,
                 0,0,0,0,0,0,0,0,
@@ -68,12 +68,12 @@ namespace EthSharp.Compiler
             })); //what are these values?
             Context.Append(EvmInstruction.SWAP1);
             Context.Append(EvmInstruction.DIV);
-            Context.Append(new UInt256(new byte[]
+            Context.Append(UInt256.FromByteArrayBE(new byte[]
             {
                 0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,
-                255,255,255,255,255,255,255,255
+                0,0,0,0,255,255,255,255
             })); //and here
             Context.Append(EvmInstruction.AND);
         }
