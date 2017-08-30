@@ -30,9 +30,10 @@ namespace EthSharp.Compiler
             return toReturn + ")";
         }
 
+        //Reverse - I think because of big endian?
         public static byte[] GetAbiSignature(this MethodDeclarationSyntax method)
         {
-            return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes().Take(4).ToArray();
+            return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes().Take(4).Reverse().ToArray();
         }
     }
 }
