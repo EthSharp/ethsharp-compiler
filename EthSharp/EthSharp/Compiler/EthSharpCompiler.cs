@@ -32,7 +32,7 @@ namespace EthSharp.Compiler
             // If incoming call data matches function, jump to that function.
             foreach (var method in methods)
             {
-                methodEntryPoints.Add(method.Key, new EthSharpAssemblyItem(Context.GetNewTag()));
+                methodEntryPoints.Add(method.Key, new EthSharpAssemblyItem(AssemblyItemType.PushTag,Context.GetNewTag()));
                 Context.Append(EvmInstruction.DUP1);
                 Context.Append(new UInt256(method.Key));
                 Context.Append(EvmInstruction.EQ);

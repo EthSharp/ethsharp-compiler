@@ -16,9 +16,11 @@ namespace EthSharp.Compiler
 
         public EvmByteCode Assemble()
         {
-            // TODO: Handle longer pushes for larger data.
-            // i.e. use PUSH2-PUSHXX instead of jsut PUSH1
             EvmByteCode ret = new EvmByteCode();
+
+            //tagNumber: locations jumping from - NOTE THAT THESE WILL CHANGE ONCE WE WRAP THE WHOLE CONTRACT
+            Dictionary<int, List<int>> jumpFromLocations = new Dictionary<int, List<int>>();
+
             foreach (var item in Items)
             {
                 switch (item.Type)
@@ -28,8 +30,6 @@ namespace EthSharp.Compiler
                         break;
                     case AssemblyItemType.PushString:
                     {
-                        ret.ByteCode.Add((byte) EvmInstruction.PUSH32);
-                        uint ii = 0;
                         throw new NotImplementedException();
                     }
                     case AssemblyItemType.Push:
@@ -44,14 +44,23 @@ namespace EthSharp.Compiler
                     case AssemblyItemType.PushTag:
                     {
                         ret.ByteCode.Add((byte)EvmInstruction.PUSH1);
-                        ret.ByteCode.Add((byte) 0); // I think we don't actually have to add 0 - maybe solidity is just doing this to extend size of bytecode (which is array)
+                        ret.ByteCode.Add((byte) 0); //This will get replaced with the location to jump to!
+                        if (jumpFromLocations.ContainsKey(item.Data.ToInt()))
+                        {
+                            jumpFromLocations[item.Data.ToInt()].Add(ret.ByteCode.Count);
+                        }
+                        else
+                        {
+                            jumpFromLocations[item.Data.ToInt()] = new List<int>{ret.ByteCode.Count};
+                        }
                         break;
                     }
                     case AssemblyItemType.PushData:
                         throw new NotImplementedException();
                     case AssemblyItemType.PushSub:
                         ret.ByteCode.Add((byte)EvmInstruction.PUSH1);
-                        ret.ByteCode.Add((byte)0);
+                        ret.ByteCode.Add((byte)0); //Think we're not using subs for now - can update later
+                        throw new NotImplementedException();
                         break;
                     case AssemblyItemType.PushSubSize:
                     {
@@ -84,9 +93,14 @@ namespace EthSharp.Compiler
                         throw new NotImplementedException();
                 }
             }
-            Console.WriteLine(ByteArrayToString(ret.ByteCode.ToArray()));
+            
+            //TODO: remove
+            Console.WriteLine(ret.ByteCode.ToArray().ToHexString());
+
+            // The way solidity handles tags is by putting them in afterwards - here
             throw new NotImplementedException();
         }
+
 
         //public EthSharpAssemblyItem NewData(byte[] value)
         //{
@@ -108,12 +122,6 @@ namespace EthSharp.Compiler
         public void Append(EvmInstruction instruction)
         {
             Items.Add(new EthSharpAssemblyItem(instruction));
-        }
-
-        public static string ByteArrayToString(byte[] ba)
-        {
-            string hex = BitConverter.ToString(ba);
-            return hex.Replace("-", "");
         }
 
         //public void Append(byte[] value)

@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace EthSharp.Compiler
 {
-    public static class CSharpExtentions
+    public static class Extensions
     {
         //Need to implement get function hash for mapping!
         public static IList<MethodDeclarationSyntax> GetMethods(this ClassDeclarationSyntax classDeclarationSyntax)
@@ -34,6 +34,12 @@ namespace EthSharp.Compiler
         public static byte[] GetAbiSignature(this MethodDeclarationSyntax method)
         {
             return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes().Take(4).Reverse().ToArray();
+        }
+
+        public static string ToHexString(this byte[] ba)
+        {
+            string hex = BitConverter.ToString(ba);
+            return hex.Replace("-", "");
         }
     }
 }
