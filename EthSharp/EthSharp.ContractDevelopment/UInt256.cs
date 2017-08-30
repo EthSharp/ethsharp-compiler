@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.HashFunction;
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 
 namespace EthSharp.ContractDevelopment
@@ -8,12 +9,30 @@ namespace EthSharp.ContractDevelopment
     public class UInt256 : IComparable<UInt256>
     {
         public static UInt256 Zero { get; } = new UInt256(new byte[0]);
-        public static UInt256 One { get; } = (UInt256)1;
 
         // parts are big-endian
         private const int width = 4;
         private readonly ulong[] parts;
         private readonly int hashCode;
+
+
+        // Really not optimised - we need to improve when this is used in future. 
+        // At the moment is going to check this and then re call ToByteArray
+        public int ByteLength
+        {
+            get
+            {
+                var bytes = this.ToByteArray();
+                int length = 32;
+                while (bytes[length - 1] == 0)
+                {
+                    if (length == 1)
+                        break;
+                    length--;
+                }
+                return length;
+            }
+        }
 
         public UInt256(byte[] value)
         {

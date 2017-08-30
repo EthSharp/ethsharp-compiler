@@ -32,7 +32,7 @@ namespace EthSharp.Compiler
 
         public static byte[] GetAbiSignature(this MethodDeclarationSyntax method)
         {
-            return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes();
+            return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes().Take(4).ToArray();
         }
     }
 }

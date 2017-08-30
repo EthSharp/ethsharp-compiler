@@ -15,9 +15,12 @@ namespace EthSharp.Compiler
 
         public EvmByteCode Assemble()
         {
+            // TODO: Handle longer pushes for larger data.
+            // i.e. use PUSH2-PUSHXX instead of jsut PUSH1
             EvmByteCode ret = new EvmByteCode();
             foreach (var item in Items)
             {
+                Console.WriteLine(item.Data.ByteLength);
                 switch (item.Type)
                 {
                     case AssemblyItemType.Operation:
@@ -33,32 +36,23 @@ namespace EthSharp.Compiler
                     {
                         ret.ByteCode.Add((byte)EvmInstruction.PUSH1);
                         ret.ByteCode.Add((byte)item.Data.ToInt());
-                        //    item.Data
-                        //byte b = max<unsigned>(1, dev::bytesRequired(i.data()));
-                        //ret.bytecode.push_back((byte)Instruction::PUSH1 - 1 + b);
-                        //ret.bytecode.resize(ret.bytecode.size() + b);
-                        //bytesRef byr(&ret.bytecode.back() + 1 - b, b);
-                        //toBigEndian(i.data(), byr);
                         break;
                     }
                     case AssemblyItemType.PushTag:
                     {
-                        //ret.bytecode.push_back(tagPush);
-                        //tagRef[ret.bytecode.size()] = i.splitForeignPushTag();
-                        //ret.bytecode.resize(ret.bytecode.size() + bytesPerTag);
-                        //break;
-                        throw new NotImplementedException();
+                        ret.ByteCode.Add((byte)EvmInstruction.PUSH1);
+                        ret.ByteCode.Add((byte) 0); // I think we don't actually have to add 0 - maybe solidity is just doing this to extend size of bytecode (which is array)
+                        break;
                     }
                     case AssemblyItemType.PushData:
                         throw new NotImplementedException();
                     case AssemblyItemType.PushSub:
-                        //ret.bytecode.push_back(dataRefPush);
-                        //subRef.insert(make_pair(size_t(i.data()), ret.bytecode.size()));
-                        //ret.bytecode.resize(ret.bytecode.size() + bytesPerDataRef);
-                        //break;
-                        throw new NotImplementedException();
+                        ret.ByteCode.Add((byte)EvmInstruction.PUSH1);
+                        ret.ByteCode.Add((byte)0);
+                        break;
                     case AssemblyItemType.PushSubSize:
                     {
+
                         //auto s = m_subs.at(size_t(i.data()))->assemble().bytecode.size();
                         //i.setPushedValue(u256(s));
                         //byte b = max<unsigned>(1, dev::bytesRequired(s));
