@@ -46,7 +46,8 @@ namespace EthSharp.Compiler
 
             foreach (var method in methods)
             {
-                //add a jumpdest (taglocation) to start.
+                Context.Append(methodEntryPoints[method.Key]); //Adds the JUMPDEST
+                //Get calldata if necessary
                 // add SLOAD
                 // POP
                 //If we want a 'payable' modifier or attribute, we would set it here- just a callvalue check == 0

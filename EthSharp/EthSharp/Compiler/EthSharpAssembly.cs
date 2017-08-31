@@ -52,14 +52,8 @@ namespace EthSharp.Compiler
                         break;
                     }
                     case AssemblyItemType.Tag:
-                        tagLocations.Add(item.Data.ToInt(), ret.ByteCode.Count)
-                        ret.ByteCode.Add();
-                        //assertThrow(i.data() != 0, AssemblyException, "");
-                        //assertThrow(i.splitForeignPushTag().first == size_t(-1), AssemblyException, "Foreign tag.");
-                        //assertThrow(ret.bytecode.size() < 0xffffffffL, AssemblyException, "Tag too large.");
-                        //m_tagPositionsInBytecode[size_t(i.data())] = ret.bytecode.size();
-                        //ret.bytecode.push_back((byte)Instruction::JUMPDEST);
-                        throw new NotImplementedException();
+                        tagLocations.Add(item.Data.ToInt(), ret.ByteCode.Count);
+                        ret.ByteCode.Add((byte)EvmInstruction.JUMPDEST);
                         break;
                     default:
                         throw new NotImplementedException();
