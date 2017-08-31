@@ -56,6 +56,18 @@ namespace EthSharp.Compiler
             }
         }
 
+        public override void VisitIdentifierName(IdentifierNameSyntax node)
+        {
+            if (Context.StorageIdentifiers.ContainsKey(node.Identifier.Text))
+            {
+                Context.Append(Context.StorageIdentifiers[node.Identifier.Text]); // push memory location onto stack
+                Context.Append(EvmInstruction.SLOAD);
+            }
+        }
 
+        public override void VisitLiteralExpression(LiteralExpressionSyntax node)
+        {
+            base.VisitLiteralExpression(node);
+        }
     }
 }
