@@ -19,10 +19,10 @@ namespace EthSharp
             using EthSharp.ContractDevelopment;
 
             public class SimpleStorage {
-                private UInt256 storedData;
+                public UInt256 StoredData { get; set; }
 
                 public UInt256 Get(){
-                    return storedData;
+                    return StoredData + 1;
                 }
             }";
             //parse tree - create assembly then emit.

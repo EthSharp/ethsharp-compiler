@@ -10,10 +10,14 @@ namespace EthSharp.Compiler
 {
     public static class Extensions
     {
-        //Need to implement get function hash for mapping!
         public static IList<MethodDeclarationSyntax> GetMethods(this ClassDeclarationSyntax classDeclarationSyntax)
         {
             return classDeclarationSyntax.Members.OfType<MethodDeclarationSyntax>().ToList();
+        }
+
+        public static IList<PropertyDeclarationSyntax> GetProperties(this ClassDeclarationSyntax classDeclarationSyntax)
+        {
+            return classDeclarationSyntax.Members.OfType<PropertyDeclarationSyntax>().ToList();
         }
 
         public static string GetExternalSignature(this MethodDeclarationSyntax method)

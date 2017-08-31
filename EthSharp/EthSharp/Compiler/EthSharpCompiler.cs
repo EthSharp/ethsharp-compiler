@@ -55,8 +55,6 @@ namespace EthSharp.Compiler
                 //If we want a 'payable' modifier or attribute, we would set it here- just a callvalue check == 0
                 //Get calldata if necessary
                 method.Value.Accept(SyntaxVisitor); //This should do all the magic!
-
-                //end by appending Instruction.Stop or Instruction.Return;
             }
 
             var test = Context.Assembly.Assemble();
@@ -96,6 +94,12 @@ namespace EthSharp.Compiler
             Context.Append(64 + 32);
             Context.Append(64);
             Context.Append(EvmInstruction.MSTORE);
+
+            //TODO: Include fieldDeclarations too 
+            foreach (var localVariable in RootClass.GetProperties())
+            {
+                Context.AssignNewStorageLocation(localVariable.Identifier.Text);
+            }
         }
     }
 }

@@ -38,9 +38,23 @@ namespace EthSharp.Compiler
         public override void VisitReturnStatement(ReturnStatementSyntax node)
         {
             node.Expression.Accept(this);
+            Context.Append(EvmInstruction.RETURN);
         }
 
-        //public override VisitExpres
+        public override void VisitBinaryExpression(BinaryExpressionSyntax node)
+        {
+            node.Left.Accept(this);
+            node.Right.Accept(this);
+
+            // There is probably a way to handle this by type?
+
+            switch (node.OperatorToken.Text)
+            {
+                case "+":
+                    Context.Append(EvmInstruction.ADD);
+                    break;
+            }
+        }
 
 
     }
