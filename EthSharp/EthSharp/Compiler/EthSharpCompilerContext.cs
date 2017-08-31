@@ -1,4 +1,5 @@
-﻿using EthSharp.ContractDevelopment;
+﻿using System.Collections.Generic;
+using EthSharp.ContractDevelopment;
 
 namespace EthSharp.Compiler
 {
@@ -6,6 +7,7 @@ namespace EthSharp.Compiler
     {
         private int _tagCount;
         public EthSharpAssembly Assembly { get; set; }
+        public Dictionary<string,int> StorageIdentifiers { get; set; }
 
         public EthSharpCompilerContext()
         {

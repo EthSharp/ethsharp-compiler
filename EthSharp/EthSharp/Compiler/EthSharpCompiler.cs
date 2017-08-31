@@ -14,20 +14,22 @@ namespace EthSharp.Compiler
         private EthSharpCompilerContext Context { get; set; }
 
         private EthSharpSyntaxVisitor SyntaxVisitor { get; set; }
+        private SyntaxTree Root { get; set; }
 
-        public EthSharpCompiler()
+        private ClassDeclarationSyntax RootClass => Root.GetRoot().ChildNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+
+        public EthSharpCompiler(SyntaxTree root)
         {
             Context = new EthSharpCompilerContext();
             SyntaxVisitor = new EthSharpSyntaxVisitor(Context);
+            Root = root;
         }
 
-        public EthSharpAssembly Create(SyntaxTree root)
+        public EthSharpAssembly Create()
         {
             // for now just assume one class
-            var rootClass = root.GetRoot().ChildNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault(); // cast as class type
             InitializeContext();
-            var classDeclarationSyntax = rootClass;
-            Dictionary<byte[], MethodDeclarationSyntax> methods = classDeclarationSyntax.GetMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
+            Dictionary<byte[], MethodDeclarationSyntax> methods = RootClass.GetMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
             Dictionary<byte[], EthSharpAssemblyItem> methodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
             RetrieveFunctionHash();
 
@@ -62,7 +64,9 @@ namespace EthSharp.Compiler
         }
 
 
-
+        /// <summary>
+        /// Don't yet understand the random hardcoded bytes but retrieves function hash from transaction data
+        /// </summary>
         private void RetrieveFunctionHash()
         {
             Context.Append(UInt256.Zero);
@@ -86,25 +90,12 @@ namespace EthSharp.Compiler
             Context.Append(EvmInstruction.AND);
         }
 
-        //Would probably rather not even use now whilst I don't understand what this does - I think it's the
-        //packaging that stops the bytecode being removed after use but I'm not sure
         private void InitializeContext()
         {
-            //need to use uint here eventually. 
-
-            //also need to work out why we do this to begin with
-
-            //can use freeMemoryPointer const here
-
-            // Compiled Contracts go here in solidity
-
+            //Taken from solidity wrapper - still trying to understand.
             Context.Append(64 + 32);
             Context.Append(64);
             Context.Append(EvmInstruction.MSTORE);
-
-            // Registering state variables goes here in solidity. Not sure if important here
-
-            // Also resets visiting of node. Unsure how important
         }
     }
 }
