@@ -22,8 +22,26 @@ namespace EthSharp.Compiler
             //Should do something with attributes 
 
             //Something with parameterlist
-
+            
             // Compile actual block
+            node.Body.Accept(this);
         }
+
+        public override void VisitBlock(BlockSyntax node)
+        {
+            foreach (var statement in node.Statements)
+            {
+                statement.Accept(this);
+            }
+        }
+
+        public override void VisitReturnStatement(ReturnStatementSyntax node)
+        {
+            node.Expression.Accept(this);
+        }
+
+        //public override VisitExpres
+
+
     }
 }

@@ -21,11 +21,7 @@ namespace EthSharp
             public class SimpleStorage {
                 private UInt256 storedData;
 
-                public void set(uint256 x) {
-                    storedData = x;
-                }
-
-                public uint256 get(){
+                public UInt256 Get(){
                     return storedData;
                 }
             }";
