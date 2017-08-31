@@ -137,6 +137,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\EthSharpSyntaxVisitor.cs" />
     <Compile Include="Compiler\Extensions.cs" />
     <Compile Include="Compiler\EthSharpAssembly.cs" />
     <Compile Include="Compiler\EthSharpAssemblyItem.cs" />

@@ -13,10 +13,12 @@ namespace EthSharp.Compiler
     {
         private EthSharpCompilerContext Context { get; set; }
 
+        private EthSharpSyntaxVisitor SyntaxVisitor { get; set; }
 
         public EthSharpCompiler()
         {
             Context = new EthSharpCompilerContext();
+            SyntaxVisitor = new EthSharpSyntaxVisitor(Context);
         }
 
         public EthSharpAssembly Create(SyntaxTree root)
@@ -47,14 +49,11 @@ namespace EthSharp.Compiler
             foreach (var method in methods)
             {
                 Context.Append(methodEntryPoints[method.Key]); //Adds the JUMPDEST
-                //Get calldata if necessary
-                // add SLOAD
-                // POP
+
                 //If we want a 'payable' modifier or attribute, we would set it here- just a callvalue check == 0
+                //Get calldata if necessary
+                method.Value.Accept(SyntaxVisitor); //This should do all the magic!
 
-
-
-                //build actual method logic 
                 //end by appending Instruction.Stop or Instruction.Return;
             }
 
