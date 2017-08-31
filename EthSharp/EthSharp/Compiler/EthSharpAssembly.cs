@@ -20,7 +20,7 @@ namespace EthSharp.Compiler
 
             //tagNumber: locations jumping from - NOTE THAT THESE WILL CHANGE ONCE WE WRAP THE WHOLE CONTRACT
             Dictionary<int, List<int>> jumpFromLocations = new Dictionary<int, List<int>>();
-
+            Dictionary<int, int> tagLocations = new Dictionary<int, int>();
             foreach (var item in Items)
             {
                 switch (item.Type)
@@ -28,10 +28,6 @@ namespace EthSharp.Compiler
                     case AssemblyItemType.Operation:
                         ret.ByteCode.Add((byte) item.Instruction);
                         break;
-                    case AssemblyItemType.PushString:
-                    {
-                        throw new NotImplementedException();
-                    }
                     case AssemblyItemType.Push:
                     {
                         int length = item.Data.ByteLength;
@@ -55,33 +51,9 @@ namespace EthSharp.Compiler
                         }
                         break;
                     }
-                    case AssemblyItemType.PushData:
-                        throw new NotImplementedException();
-                    case AssemblyItemType.PushSub:
-                        ret.ByteCode.Add((byte)EvmInstruction.PUSH1);
-                        ret.ByteCode.Add((byte)0); //Think we're not using subs for now - can update later
-                        throw new NotImplementedException();
-                        break;
-                    case AssemblyItemType.PushSubSize:
-                    {
-
-                        //auto s = m_subs.at(size_t(i.data()))->assemble().bytecode.size();
-                        //i.setPushedValue(u256(s));
-                        //byte b = max<unsigned>(1, dev::bytesRequired(s));
-                        //ret.bytecode.push_back((byte)Instruction::PUSH1 - 1 + b);
-                        //ret.bytecode.resize(ret.bytecode.size() + b);
-                        //bytesRef byr(&ret.bytecode.back() + 1 - b, b);
-                        //toBigEndian(s, byr);
-                        //break;
-                        throw new NotImplementedException();
-                    }
-                    case AssemblyItemType.PushProgramSize:
-                    {
-                        throw new NotImplementedException();
-                    }
-                    case AssemblyItemType.PushLibraryAddress:
-                        throw new NotImplementedException();
                     case AssemblyItemType.Tag:
+                        tagLocations.Add(item.Data.ToInt(), ret.ByteCode.Count)
+                        ret.ByteCode.Add();
                         //assertThrow(i.data() != 0, AssemblyException, "");
                         //assertThrow(i.splitForeignPushTag().first == size_t(-1), AssemblyException, "Foreign tag.");
                         //assertThrow(ret.bytecode.size() < 0xffffffffL, AssemblyException, "Tag too large.");

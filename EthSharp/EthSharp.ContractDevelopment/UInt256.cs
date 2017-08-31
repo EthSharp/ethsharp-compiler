@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * From: https://github.com/pmlyon/BitSharp/tree/master/BitSharp.Common
+ * 
+ * Unlicensed
+ */
+
+using System;
 using System.Data.HashFunction;
 using System.Globalization;
 using System.Linq;

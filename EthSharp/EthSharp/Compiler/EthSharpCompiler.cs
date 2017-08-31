@@ -46,7 +46,15 @@ namespace EthSharp.Compiler
 
             foreach (var method in methods)
             {
-                //build actual method logic - end by appending Instruction.Stop or Instruction.Return;
+                //add a jumpdest (taglocation) to start.
+                // add SLOAD
+                // POP
+                //If we want a 'payable' modifier or attribute, we would set it here- just a callvalue check == 0
+
+
+
+                //build actual method logic 
+                //end by appending Instruction.Stop or Instruction.Return;
             }
 
             var test = Context.Assembly.Assemble();

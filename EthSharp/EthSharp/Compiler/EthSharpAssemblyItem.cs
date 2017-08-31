@@ -40,16 +40,9 @@ namespace EthSharp.Compiler
 
     public enum AssemblyItemType
     {
-        UndefinedItem,
         Operation,
         Push,
-        PushString,
         PushTag,
-        PushSub,
-        PushSubSize,
-        PushProgramSize,
-        Tag,
-        PushData,
-        PushLibraryAddress
+        Tag
     };
 }
