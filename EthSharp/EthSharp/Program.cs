@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,18 +16,7 @@ namespace EthSharp
     {
         static void Main(string[] args)
         {
-            string source = @"
-            using EthSharp.ContractDevelopment;
-
-            public class SimpleStorage {
-                public UInt256 StoredData { get; set; }
-
-                public UInt256 Get(){
-                    return StoredData + 1;
-                }
-            }";
-            //parse tree - create assembly then emit.
-
+            string source = File.ReadAllText("SimpleTest.cs");
             var tree = SyntaxFactory.ParseSyntaxTree(source);
             var assembly = new EthSharpCompiler(tree).Create();
             Console.ReadKey();

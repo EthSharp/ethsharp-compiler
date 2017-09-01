@@ -40,15 +40,15 @@ namespace EthSharp.Compiler
                     case AssemblyItemType.PushTag:
                     {
                         ret.ByteCode.Add((byte)EvmInstruction.PUSH1);
-                        ret.ByteCode.Add((byte) 0); //This will get replaced with the location to jump to!
                         if (jumpFromLocations.ContainsKey(item.Data.ToInt()))
                         {
                             jumpFromLocations[item.Data.ToInt()].Add(ret.ByteCode.Count);
                         }
                         else
                         {
-                            jumpFromLocations[item.Data.ToInt()] = new List<int>{ret.ByteCode.Count};
+                            jumpFromLocations[item.Data.ToInt()] = new List<int> { ret.ByteCode.Count };
                         }
+                        ret.ByteCode.Add((byte) 0); //This will get replaced with the location to jump to!
                         break;
                     }
                     case AssemblyItemType.Tag:
@@ -59,7 +59,18 @@ namespace EthSharp.Compiler
                         throw new NotImplementedException();
                 }
             }
-            
+
+            //Update all jumps to correct location
+            foreach (var tag in tagLocations)
+            {
+                int tagId = tag.Key;
+                int tagLocation = tag.Value;
+                foreach (var jumpFrom in jumpFromLocations[tagId])
+                {
+                    ret.ByteCode[jumpFrom] = (byte)tagLocation;
+                }
+            }
+
             //TODO: remove
             Console.WriteLine(ret.ByteCode.ToArray().ToHexString());
 

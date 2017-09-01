@@ -36,31 +36,27 @@ namespace EthSharp.Compiler
             // If incoming call data matches function, jump to that function.
             foreach (var method in methods)
             {
-                methodEntryPoints.Add(method.Key, new EthSharpAssemblyItem(AssemblyItemType.PushTag,Context.GetNewTag()));
+                methodEntryPoints.Add(method.Key, new EthSharpAssemblyItem(AssemblyItemType.Tag,Context.GetNewTag()));
                 Context.Append(EvmInstruction.DUP1);
                 Context.Append(new UInt256(method.Key));
                 Context.Append(EvmInstruction.EQ);
-                Context.Append(methodEntryPoints[method.Key]);
+                Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag,methodEntryPoints[method.Key].Data)); // this should be cleaner
                 Context.Append(EvmInstruction.JUMPI);
             }
-
-            // if we reached here (bottom of the function list) - no function hashes were matched, so fail.
-            // if fallback was to be implemented, it would happen here.
+            // bottom of function switch - fail
             Context.Append(EvmInstruction.INVALID);
 
             foreach (var method in methods)
             {
-                Context.Append(methodEntryPoints[method.Key]); //Adds the JUMPDEST
-
-                //If we want a 'payable' modifier or attribute, we would set it here- just a callvalue check == 0
-                //Get calldata if necessary
+                Context.Append(methodEntryPoints[method.Key]); // sets destination to jump to from switch
+                // would implement payable and other attributes here
+                // get calldata if necessary
                 method.Value.Accept(SyntaxVisitor); //This should do all the magic!
             }
 
             var test = Context.Assembly.Assemble();
             throw new NotImplementedException();
         }
-
 
         /// <summary>
         /// Don't yet understand the random hardcoded bytes but retrieves function hash from transaction data

@@ -53,6 +53,7 @@
     <Compile Include="Address.cs" />
     <Compile Include="Bits.cs" />
     <Compile Include="Block.cs" />
+    <Compile Include="Contract.cs" />
     <Compile Include="EvmContext.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="UInt256.cs" />

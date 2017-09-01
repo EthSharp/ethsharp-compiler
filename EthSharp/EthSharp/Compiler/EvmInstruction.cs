@@ -1,4 +1,7 @@
-﻿namespace EthSharp.Compiler
+﻿/*
+ * Thanks to Solidity for this
+ */
+namespace EthSharp.Compiler
 {
     public enum EvmInstruction
     {

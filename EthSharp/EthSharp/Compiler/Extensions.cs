@@ -31,7 +31,12 @@ namespace EthSharp.Compiler
                 if (i != method.ParameterList.Parameters.Count - 1)
                     toReturn += ",";
             }
-            return toReturn + ")";
+            toReturn += ")";
+
+            //apply transformations to match ABI
+            toReturn = toReturn.Replace("UInt256", "uint256");
+
+            return toReturn;
         }
 
         //Reverse - I think because of big endian?

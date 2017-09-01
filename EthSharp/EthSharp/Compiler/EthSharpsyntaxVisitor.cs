@@ -45,12 +45,10 @@ namespace EthSharp.Compiler
         {
             node.Left.Accept(this);
             node.Right.Accept(this);
-
-            // There is probably a way to handle this by type?
-
-            switch (node.OperatorToken.Text)
+            // TODO: Add more operators
+            switch (node.OperatorToken.Kind())
             {
-                case "+":
+                case SyntaxKind.PlusToken:
                     Context.Append(EvmInstruction.ADD);
                     break;
             }
@@ -67,7 +65,13 @@ namespace EthSharp.Compiler
 
         public override void VisitLiteralExpression(LiteralExpressionSyntax node)
         {
-            base.VisitLiteralExpression(node);
+            // may have to become more complex in future - using node.Token.
+            switch (node.Kind())
+            {
+                case SyntaxKind.NumericLiteralExpression:
+                    Context.Append((int) node.Token.Value);
+                    break;
+            }
         }
     }
 }
