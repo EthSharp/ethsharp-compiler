@@ -34,21 +34,35 @@ namespace EthSharp.Compiler
             toReturn += ")";
 
             //apply transformations to match ABI
-            toReturn = toReturn.Replace("UInt256", "uint256");
-
-            return toReturn;
+            return ApplyAbiTransformations(toReturn);
         }
 
-        //Reverse - I think because of big endian?
+        //Reverse is cos of big endian
         public static byte[] GetAbiSignature(this MethodDeclarationSyntax method)
         {
             return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes().Take(4).Reverse().ToArray();
+        }
+
+        public static byte[] GetAbiSignatureGetter(this PropertyDeclarationSyntax method)
+        {
+
+            return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes().Take(4).Reverse().ToArray();
+        }
+
+        public static byte[] GetAbiSignatureSetter(this PropertyDeclarationSyntax method)
+        {
+            throw new NotImplementedException();
         }
 
         public static string ToHexString(this byte[] ba)
         {
             string hex = BitConverter.ToString(ba);
             return hex.Replace("-", "");
+        }
+
+        private static string ApplyAbiTransformations(string input)
+        {
+            return input.Replace("UInt256", "uint256");
         }
     }
 }
