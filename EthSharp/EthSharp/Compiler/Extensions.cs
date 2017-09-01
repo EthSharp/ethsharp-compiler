@@ -43,10 +43,10 @@ namespace EthSharp.Compiler
             return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes().Take(4).Reverse().ToArray();
         }
 
-        public static byte[] GetAbiSignatureGetter(this PropertyDeclarationSyntax method)
+        public static byte[] GetGetterAbiSignature(this PropertyDeclarationSyntax property)
         {
-
-            return HashHelper.Keccak256(method.GetExternalSignature()).GetBytes().Take(4).Reverse().ToArray();
+            string signature = property.Identifier.Text + "()";
+            return HashHelper.Keccak256(signature).GetBytes().Take(4).Reverse().ToArray();
         }
 
         public static byte[] GetAbiSignatureSetter(this PropertyDeclarationSyntax method)

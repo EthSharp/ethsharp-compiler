@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Security.Cryptography;
 using HashLib;
 using EthSharp.ContractDevelopment;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace EthSharp.Compiler
 {
@@ -29,15 +30,7 @@ namespace EthSharp.Compiler
         {
             // for now just assume one class
             InitializeContext();
-
-            // Make it so that IN THE CODE, properties can be called as they are in C#.
-
-            //For now, just get public accessor and add loop to make into method
-
-            foreach (var property in RootClass.GetProperties())
-            {
-                Console.WriteLine(property);
-            }
+            Dictionary<byte[], PropertyDeclarationSyntax> propertyGetters = RootClass.GetProperties().ToDictionary(x => x.GetGetterAbiSignature(), x => x);
             Dictionary<byte[], MethodDeclarationSyntax> methods = RootClass.GetMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
             Dictionary<byte[], EthSharpAssemblyItem> methodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
             RetrieveFunctionHash();
