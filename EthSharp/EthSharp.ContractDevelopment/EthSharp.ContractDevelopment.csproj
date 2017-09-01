@@ -55,7 +55,9 @@
     <Compile Include="Block.cs" />
     <Compile Include="Contract.cs" />
     <Compile Include="EvmContext.cs" />
+    <Compile Include="EvmException.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="PayableAttribute.cs" />
     <Compile Include="UInt256.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -145,6 +145,7 @@
     <Compile Include="Compiler\EthSharpCompilerContext.cs" />
     <Compile Include="Compiler\EvmByteCode.cs" />
     <Compile Include="Compiler\EvmInstruction.cs" />
+    <Compile Include="Fundraiser.cs" />
     <Compile Include="Hashing\HashHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
