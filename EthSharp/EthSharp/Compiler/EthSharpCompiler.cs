@@ -79,9 +79,21 @@ namespace EthSharp.Compiler
             return WrapByteCode(contractByteCode);
         }
 
+
+        // constructor also goes here
         private EvmByteCode WrapByteCode(EvmByteCode toWrap)
         {
-            throw new NotImplementedException();
+            var preAssembly = new EthSharpAssembly();
+            preAssembly.Append(toWrap.ByteCode.Count); // push length of bytecode
+            preAssembly.Append(0x0c); // push offset of bytecode - TODO: THIS COULD CHANGE IF THIS BLOCK CHANGES!
+            preAssembly.Append(UInt256.Zero); // push memory location to store in (0)
+            preAssembly.Append(EvmInstruction.CODECOPY); // codecopy
+            preAssembly.Append(toWrap.ByteCode.Count); // push length of code to pick
+            preAssembly.Append(UInt256.Zero); // push location of code (0)
+            preAssembly.Append(EvmInstruction.RETURN);
+            var preByteCode = preAssembly.Assemble();
+            toWrap.ByteCode.InsertRange(0, preByteCode.ByteCode);
+            return toWrap;
         }
 
         /// <summary>

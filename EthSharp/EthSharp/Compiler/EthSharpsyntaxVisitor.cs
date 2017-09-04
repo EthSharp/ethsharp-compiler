@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EthSharp.ContractDevelopment;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -16,6 +17,8 @@ namespace EthSharp.Compiler
         {
             Context = context;
         }
+
+        // Massive TODO: Visit all syntax declarations
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
@@ -52,6 +55,12 @@ namespace EthSharp.Compiler
         public override void VisitReturnStatement(ReturnStatementSyntax node)
         {
             node.Expression.Accept(this);
+            // need to MSTORE the value currently on top of stack
+            Context.Append(UInt256.Zero);
+            Context.Append(EvmInstruction.MSTORE);
+            // then add values for where it is
+            Context.Append(0x20);
+            Context.Append(UInt256.Zero);
             Context.Append(EvmInstruction.RETURN);
         }
 

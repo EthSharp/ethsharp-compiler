@@ -54,8 +54,6 @@ namespace EthSharp.Compiler
                         tagLocations.Add(item.Data.ToInt(), ret.ByteCode.Count);
                         ret.ByteCode.Add((byte)EvmInstruction.JUMPDEST);
                         break;
-                    default:
-                        throw new NotImplementedException(); // TODO: Exception handling
                 }
             }
 
