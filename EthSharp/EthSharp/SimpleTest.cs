@@ -4,8 +4,8 @@ public class SimpleTest : Contract
 {
     public UInt256 StoredData { get; private set; }
 
-    public void Increase(UInt256 amount)
+    public void Increase()
     {
-        StoredData = StoredData + amount;
+        StoredData = StoredData + 1;
     }
 }

@@ -35,6 +35,18 @@ namespace EthSharp.Compiler
             Dictionary<byte[], EthSharpAssemblyItem> methodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
             RetrieveFunctionHash();
 
+
+            // If incoming call data matches get, jump to that function
+            foreach (var property in propertyGetters)
+            {
+                methodEntryPoints.Add(property.Key, new EthSharpAssemblyItem(AssemblyItemType.Tag, Context.GetNewTag()));
+                Context.Append(EvmInstruction.DUP1);
+                Context.Append(new UInt256(property.Key));
+                Context.Append(EvmInstruction.EQ);
+                Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, methodEntryPoints[property.Key].Data)); // this should be cleaner
+                Context.Append(EvmInstruction.JUMPI);
+            }
+
             // If incoming call data matches function, jump to that function.
             foreach (var method in methods)
             {
@@ -47,6 +59,14 @@ namespace EthSharp.Compiler
             }
             // bottom of function switch - fail
             Context.Append(EvmInstruction.INVALID);
+
+            foreach (var property in propertyGetters)
+            {
+                Context.Append(methodEntryPoints[property.Key]);
+                Context.Append(Context.StorageIdentifiers[property.Value.Identifier.Text]); //push data location
+                Context.Append(EvmInstruction.SLOAD); //sload it
+                Context.Append(EvmInstruction.RETURN);//return
+            }
 
             foreach (var method in methods)
             {

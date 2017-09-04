@@ -1,0 +1,3 @@
+The EthSharp ethos isn't about the language - it's about making blockchain development easy.
+
+The Ethereum development ecosystem is young. As it stands, there are limited tools for writing, debugging and testing smart contracts.
