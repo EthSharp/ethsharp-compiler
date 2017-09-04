@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EthSharp.ContractDevelopment;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -86,6 +87,8 @@ namespace EthSharp.Compiler
                 case SyntaxKind.PercentToken:
                     Context.Append(EvmInstruction.MOD);
                     break;
+                default:
+                    throw new NotImplementedException();
             }
         }
 
@@ -105,7 +108,26 @@ namespace EthSharp.Compiler
                 case SyntaxKind.NumericLiteralExpression:
                     Context.Append((int) node.Token.Value);
                     break;
+                default:
+                    throw new NotImplementedException();
             }
+        }
+
+        //TODO: Throw on all unready syntax until completed
+
+        public override void Visit(SyntaxNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VisitAccessorDeclaration(AccessorDeclarationSyntax node)
+        {
+            throw new NotImplementedException();
         }
     }
 }
