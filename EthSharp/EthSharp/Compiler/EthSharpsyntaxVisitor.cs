@@ -23,7 +23,6 @@ namespace EthSharp.Compiler
 
             //Something with parameterlist
             
-            // Compile actual block
             node.Body.Accept(this);
         }
 
@@ -33,6 +32,21 @@ namespace EthSharp.Compiler
             {
                 statement.Accept(this);
             }
+        }
+
+        public override void VisitExpressionStatement(ExpressionStatementSyntax node)
+        {
+            node.Expression.Accept(this);
+        }
+
+        public override void VisitAssignmentExpression(AssignmentExpressionSyntax node)
+        {
+            node.Right.Accept(this);
+
+            //TODO: local variables
+            var storageVar = (IdentifierNameSyntax) node.Left;
+            Context.Append(Context.StorageIdentifiers[storageVar.Identifier.Text]);
+            Context.Append(EvmInstruction.SSTORE);
         }
 
         public override void VisitReturnStatement(ReturnStatementSyntax node)
@@ -45,11 +59,23 @@ namespace EthSharp.Compiler
         {
             node.Left.Accept(this);
             node.Right.Accept(this);
-            // TODO: Add more operators
+            // TODO: Test these operators and add any missing
             switch (node.OperatorToken.Kind())
             {
                 case SyntaxKind.PlusToken:
                     Context.Append(EvmInstruction.ADD);
+                    break;
+                case SyntaxKind.MinusToken:
+                    Context.Append(EvmInstruction.SUB);
+                    break;
+                case SyntaxKind.AsteriskToken:
+                    Context.Append(EvmInstruction.MUL);
+                    break;
+                case SyntaxKind.SlashToken:
+                    Context.Append(EvmInstruction.DIV);
+                    break;
+                case SyntaxKind.PercentToken:
+                    Context.Append(EvmInstruction.MOD);
                     break;
             }
         }
