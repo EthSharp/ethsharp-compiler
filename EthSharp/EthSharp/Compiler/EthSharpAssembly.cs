@@ -18,7 +18,6 @@ namespace EthSharp.Compiler
         {
             EvmByteCode ret = new EvmByteCode();
 
-            //tagNumber: locations jumping from - NOTE THAT THESE WILL CHANGE ONCE WE WRAP THE WHOLE CONTRACT
             Dictionary<int, List<int>> jumpFromLocations = new Dictionary<int, List<int>>();
             Dictionary<int, int> tagLocations = new Dictionary<int, int>();
             foreach (var item in Items)
@@ -56,7 +55,7 @@ namespace EthSharp.Compiler
                         ret.ByteCode.Add((byte)EvmInstruction.JUMPDEST);
                         break;
                     default:
-                        throw new NotImplementedException();
+                        throw new NotImplementedException(); // TODO: Exception handling
                 }
             }
 
@@ -71,20 +70,8 @@ namespace EthSharp.Compiler
                 }
             }
 
-            //TODO: remove
-            Console.WriteLine(ret.ByteCode.ToArray().ToHexString());
-
-            // The way solidity handles tags is by putting them in afterwards - here
-            throw new NotImplementedException();
+            return ret;
         }
-
-
-        //public EthSharpAssemblyItem NewData(byte[] value)
-        //{
-        //    //AssemblyItem newData(bytes const& _data) { h256 h(dev::keccak256(asString(_data))); m_data[h] = _data; return AssemblyItem(PushData, h);
-
-        //    throw new NotImplementedException();
-        //}
 
         public void Append(EthSharpAssemblyItem assemblyItem)
         {
@@ -100,10 +87,5 @@ namespace EthSharp.Compiler
         {
             Items.Add(new EthSharpAssemblyItem(instruction));
         }
-
-        //public void Append(byte[] value)
-        //{
-        //    Items.Add(NewData(value));
-        //}
     }
 }

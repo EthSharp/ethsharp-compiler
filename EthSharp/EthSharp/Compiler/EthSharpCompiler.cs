@@ -26,7 +26,7 @@ namespace EthSharp.Compiler
             Root = root;
         }
 
-        public EthSharpAssembly Create()
+        public EvmByteCode CreateByteCode()
         {
             // for now just assume one class
             InitializeContext();
@@ -34,7 +34,6 @@ namespace EthSharp.Compiler
             Dictionary<byte[], MethodDeclarationSyntax> methods = RootClass.GetMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
             Dictionary<byte[], EthSharpAssemblyItem> methodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
             RetrieveFunctionHash();
-
 
             // If incoming call data matches get, jump to that function
             foreach (var property in propertyGetters)
@@ -76,16 +75,21 @@ namespace EthSharp.Compiler
                 method.Value.Accept(SyntaxVisitor); //This should do all the magic!
             }
 
-            var test = Context.Assembly.Assemble();
+            var contractByteCode = Context.Assembly.Assemble();
+            return WrapByteCode(contractByteCode);
+        }
+
+        private EvmByteCode WrapByteCode(EvmByteCode toWrap)
+        {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Don't yet understand the random hardcoded bytes but retrieves function hash from transaction data
+        /// Retrieves function hash from transaction data
         /// </summary>
         private void RetrieveFunctionHash()
         {
-            Context.Append(UInt256.Zero);
+            Context.Append(UInt256.Zero); // offset for calldata
             Context.Append(EvmInstruction.CALLDATALOAD);
             Context.Append(UInt256.FromByteArrayBE(new byte[]
             {
@@ -93,7 +97,7 @@ namespace EthSharp.Compiler
                 0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0,
                 0,0,0,0,0,0,0,0
-            })); //what are these values?
+            })); //hardcoded bytes used to get first 4 bytes of transaction data
             Context.Append(EvmInstruction.SWAP1);
             Context.Append(EvmInstruction.DIV);
             Context.Append(UInt256.FromByteArrayBE(new byte[]
@@ -108,7 +112,7 @@ namespace EthSharp.Compiler
 
         private void InitializeContext()
         {
-            //Taken from solidity wrapper - still trying to understand.
+            //Taken from solidity wrapper - added to front of contract
             Context.Append(64 + 32);
             Context.Append(64);
             Context.Append(EvmInstruction.MSTORE);

@@ -18,7 +18,8 @@ namespace EthSharp
         {
             string source = File.ReadAllText("SimpleTest.cs");
             var tree = SyntaxFactory.ParseSyntaxTree(source);
-            var assembly = new EthSharpCompiler(tree).Create();
+            var evmByteCode = new EthSharpCompiler(tree).CreateByteCode();
+            Console.WriteLine(evmByteCode.ByteCode.ToHexString());
             Console.ReadKey();
         }
 

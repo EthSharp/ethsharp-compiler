@@ -19,10 +19,8 @@ namespace EthSharp.Compiler
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
-            //Should do something with attributes 
-
-            //Something with parameterlist
-            
+            // TODO: Do something with attributes 
+            // TODO: Do something with parameterlist
             node.Body.Accept(this);
         }
 
@@ -32,6 +30,8 @@ namespace EthSharp.Compiler
             {
                 statement.Accept(this);
             }
+            if (Context.Assembly.Items.LastOrDefault()?.Instruction != EvmInstruction.RETURN)
+                Context.Append(EvmInstruction.STOP); // Obviously this stops methods from being called internally. Need to work out correct pattern to handle this
         }
 
         public override void VisitExpressionStatement(ExpressionStatementSyntax node)
@@ -91,7 +91,6 @@ namespace EthSharp.Compiler
 
         public override void VisitLiteralExpression(LiteralExpressionSyntax node)
         {
-            // may have to become more complex in future - using node.Token.
             switch (node.Kind())
             {
                 case SyntaxKind.NumericLiteralExpression:

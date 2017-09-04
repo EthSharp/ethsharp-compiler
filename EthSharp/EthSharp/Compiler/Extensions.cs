@@ -54,9 +54,9 @@ namespace EthSharp.Compiler
             throw new NotImplementedException();
         }
 
-        public static string ToHexString(this byte[] ba)
+        public static string ToHexString(this IEnumerable<byte> ba)
         {
-            string hex = BitConverter.ToString(ba);
+            string hex = BitConverter.ToString(ba.ToArray());
             return hex.Replace("-", "");
         }
 
