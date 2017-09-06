@@ -79,7 +79,6 @@ namespace EthSharp.Compiler
             return WrapByteCode(contractByteCode);
         }
 
-
         // constructor also goes here
         private EvmByteCode WrapByteCode(EvmByteCode toWrap)
         {

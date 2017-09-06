@@ -19,8 +19,6 @@ namespace EthSharp.Compiler
             Context = context;
         }
 
-        // Massive TODO: Visit all syntax declarations
-
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
             // TODO: Do something with attributes 
@@ -55,6 +53,9 @@ namespace EthSharp.Compiler
 
         public override void VisitReturnStatement(ReturnStatementSyntax node)
         {
+            // This currently works for public functions, but when called privately, we actually want to
+            // put the value on the top of the stack and then jump [out]
+
             node.Expression.Accept(this);
             // need to MSTORE the value currently on top of stack
             Context.Append(UInt256.Zero);
@@ -106,7 +107,7 @@ namespace EthSharp.Compiler
             switch (node.Kind())
             {
                 case SyntaxKind.NumericLiteralExpression:
-                    Context.Append((int) node.Token.Value);
+                    Context.Append((int) node.Token.Value); //handling UInt256
                     break;
                 default:
                     throw new NotImplementedException();
