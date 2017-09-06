@@ -144,5 +144,105 @@ namespace EthSharp.Compiler
         {
             base.VisitAnonymousMethodExpression(node);
         }
+
+        public override void VisitAnonymousObjectCreationExpression(AnonymousObjectCreationExpressionSyntax node)
+        {
+            base.VisitAnonymousObjectCreationExpression(node);
+        }
+
+        public override void VisitAnonymousObjectMemberDeclarator(AnonymousObjectMemberDeclaratorSyntax node)
+        {
+            base.VisitAnonymousObjectMemberDeclarator(node);
+        }
+
+        public override void VisitArgument(ArgumentSyntax node)
+        {
+            base.VisitArgument(node);
+        }
+
+        public override void VisitArgumentList(ArgumentListSyntax node)
+        {
+            base.VisitArgumentList(node);
+        }
+
+        public override void VisitArrayCreationExpression(ArrayCreationExpressionSyntax node)
+        {
+            base.VisitArrayCreationExpression(node);
+        }
+
+        public override void VisitArrayRankSpecifier(ArrayRankSpecifierSyntax node)
+        {
+            base.VisitArrayRankSpecifier(node);
+        }
+
+        public override void VisitArrayType(ArrayTypeSyntax node)
+        {
+            base.VisitArrayType(node);
+        }
+
+        public override void VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
+        {
+            base.VisitArrowExpressionClause(node);
+        }
+
+        public override void VisitAttribute(AttributeSyntax node)
+        {
+            base.VisitAttribute(node);
+        }
+
+        public override void VisitAttributeArgument(AttributeArgumentSyntax node)
+        {
+            base.VisitAttributeArgument(node);
+        }
+
+        public override void VisitAttributeArgumentList(AttributeArgumentListSyntax node)
+        {
+            base.VisitAttributeArgumentList(node);
+        }
+
+        public override void VisitAttributeList(AttributeListSyntax node)
+        {
+            base.VisitAttributeList(node);
+        }
+
+        public override void VisitAttributeTargetSpecifier(AttributeTargetSpecifierSyntax node)
+        {
+            base.VisitAttributeTargetSpecifier(node);
+        }
+
+        public override void VisitAwaitExpression(AwaitExpressionSyntax node)
+        {
+            base.VisitAwaitExpression(node);
+        }
+
+        public override void VisitBadDirectiveTrivia(BadDirectiveTriviaSyntax node)
+        {
+            base.VisitBadDirectiveTrivia(node);
+        }
+
+        public override void VisitBaseExpression(BaseExpressionSyntax node)
+        {
+            base.VisitBaseExpression(node);
+        }
+
+        public override void VisitBaseList(BaseListSyntax node)
+        {
+            base.VisitBaseList(node);
+        }
+
+        public override void VisitBracketedArgumentList(BracketedArgumentListSyntax node)
+        {
+            base.VisitBracketedArgumentList(node);
+        }
+
+        public override void VisitBracketedParameterList(BracketedParameterListSyntax node)
+        {
+            base.VisitBracketedParameterList(node);
+        }
+
+        public override void VisitBreakStatement(BreakStatementSyntax node)
+        {
+            base.VisitBreakStatement(node);
+        }
     }
 }
