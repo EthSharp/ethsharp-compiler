@@ -129,5 +129,20 @@ namespace EthSharp.Compiler
         {
             throw new NotImplementedException();
         }
+
+        public override void VisitAccessorList(AccessorListSyntax node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VisitAliasQualifiedName(AliasQualifiedNameSyntax node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VisitAnonymousMethodExpression(AnonymousMethodExpressionSyntax node)
+        {
+            base.VisitAnonymousMethodExpression(node);
+        }
     }
 }
