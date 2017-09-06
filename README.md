@@ -5,5 +5,3 @@ This compiler is currently in development. Feel free to observe and contribute b
 This readme will be updated as progress continues and the project comes closer to real-world usability.
 
 If you want to contribute, join our [Slack](https://join.slack.com/t/ethsharp/shared_invite/MjM3ODAyNDc1MzM1LTE1MDQ2NjA1MzMtN2E2YjRhZGNhNQ).
-
-Have a look at the current roadmap on Trello [here](https://trello.com/b/HI0fJRvI/development). 
