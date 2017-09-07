@@ -15,23 +15,19 @@ namespace EthSharp.Compiler
         private EthSharpCompilerContext Context { get; set; }
 
         private EthSharpSyntaxVisitor SyntaxVisitor { get; set; }
-        private SyntaxTree Root { get; set; }
-
-        private ClassDeclarationSyntax RootClass => Root.GetRoot().ChildNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
 
         public EthSharpCompiler(SyntaxTree root)
         {
-            Context = new EthSharpCompilerContext();
+            Context = new EthSharpCompilerContext(root);
             SyntaxVisitor = new EthSharpSyntaxVisitor(Context);
-            Root = root;
         }
 
         public EvmByteCode CreateByteCode()
         {
             // for now just assume one class
             InitializeContext();
-            Dictionary<byte[], PropertyDeclarationSyntax> propertyGetters = RootClass.GetProperties().ToDictionary(x => x.GetGetterAbiSignature(), x => x);
-            Dictionary<byte[], MethodDeclarationSyntax> methods = RootClass.GetPublicMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
+            Dictionary<byte[], PropertyDeclarationSyntax> propertyGetters = Context.RootClass.GetProperties().ToDictionary(x => x.GetGetterAbiSignature(), x => x);
+            Dictionary<byte[], MethodDeclarationSyntax> methods = Context.RootClass.GetPublicMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
             Dictionary<byte[], EthSharpAssemblyItem> publicMethodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
             RetrieveFunctionHash();
 
@@ -67,15 +63,37 @@ namespace EthSharp.Compiler
                 Context.Append(EvmInstruction.RETURN);//return
             }
 
-            //  actual method compilation happens in here. Lets treat each public function like an entry point
+            //  actual method compilation happens in here. Lets treat each public function like an entry point.
             foreach (var method in methods)
             {
-                Context.Append(publicMethodEntryPoints[method.Key]); // sets destination to jump to from switch
-                method.Value.Accept(SyntaxVisitor); //This should do all the magic!
+                CompilePublicMethod(method.Value, publicMethodEntryPoints[method.Key]); //This should do all the magic!
             }
+
+            CompileMethodQueue();
 
             var contractByteCode = Context.Assembly.Assemble();
             return WrapByteCode(contractByteCode);
+        }
+
+        private void CompilePublicMethod(MethodDeclarationSyntax method, EthSharpAssemblyItem jumpDest)
+        {
+            Context.Append(jumpDest); // jumpdest for this public method
+            int tagToJumpOutTo = Context.GetNewTag();
+            Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, tagToJumpOutTo)); // push jump back tag
+            var internalMethodTag = Context.GetMethodTag(method);
+            Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, internalMethodTag));  // push private jump tag
+            Context.Append(EvmInstruction.JUMP);
+            Context.Append(new EthSharpAssemblyItem(AssemblyItemType.Tag, tagToJumpOutTo)); // jump back tag
+            // TODO: because public, need to append either return or stop here 
+        }
+
+        private void CompileMethodQueue()
+        {
+            while (Context.MethodQueue.Any())
+            {
+                var methodToCompile = Context.MethodQueue.Dequeue();
+                methodToCompile.Accept(SyntaxVisitor);
+            }
         }
 
         // constructor also goes here
@@ -128,7 +146,7 @@ namespace EthSharp.Compiler
             Context.Append(EvmInstruction.MSTORE);
 
             //TODO: Include fieldDeclarations too 
-            foreach (var localVariable in RootClass.GetProperties())
+            foreach (var localVariable in Context.RootClass.GetProperties())
             {
                 Context.AssignNewStorageLocation(localVariable.Identifier.Text);
             }

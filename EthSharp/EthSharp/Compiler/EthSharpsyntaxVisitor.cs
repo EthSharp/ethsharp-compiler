@@ -21,22 +21,10 @@ namespace EthSharp.Compiler
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
-            //Right now only public methods will get here.
-            //Context.MethodBlockEntryPoints.Add(node.Identifier.Text, new EthSharpAssemblyItem(AssemblyItemType.Tag, Context.GetNewTag()));
-
-            //Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, Context.MethodBlockEntryPoints[node.Identifier.Text].Data));
-            //Context.Append(EvmInstruction.JUMP);
-
-            //// fill out code here
-            //node.Body.Accept(this)
-
-            //Create an entry point to the method block.
-
             // TODO: Do something with attributes 
             // TODO: Do something with parameterlist
+            Context.Append(Context.MethodBlockEntryPoints[node.Identifier.Text]);
             node.Body.Accept(this);
-
-            //depending on public or private, changes what to append here
         }
 
         public override void VisitBlock(BlockSyntax node)
@@ -45,6 +33,7 @@ namespace EthSharp.Compiler
             {
                 statement.Accept(this);
             }
+            // this wont go here any more.
             if (Context.Assembly.Items.LastOrDefault()?.Instruction != EvmInstruction.RETURN)
                 Context.Append(EvmInstruction.STOP); // Obviously this stops methods from being called internally. Need to work out correct pattern to handle this
         }
@@ -71,12 +60,12 @@ namespace EthSharp.Compiler
 
             node.Expression.Accept(this);
             // need to MSTORE the value currently on top of stack
-            Context.Append(UInt256.Zero);
-            Context.Append(EvmInstruction.MSTORE);
-            // then add values for where it is
-            Context.Append(0x20);
-            Context.Append(UInt256.Zero);
-            Context.Append(EvmInstruction.RETURN);
+            //Context.Append(UInt256.Zero);
+            //Context.Append(EvmInstruction.MSTORE);
+            //// then add values for where it is
+            //Context.Append(0x20);
+            //Context.Append(UInt256.Zero);
+            //Context.Append(EvmInstruction.RETURN);
         }
 
         public override void VisitBinaryExpression(BinaryExpressionSyntax node)
@@ -127,7 +116,24 @@ namespace EthSharp.Compiler
             }
         }
 
-#region unimplemented
+        // A method() call. Ignoring parameters for now
+        public override void VisitInvocationExpression(InvocationExpressionSyntax node)
+        {
+            // push tag to jump out to
+            int tagToJumpOutTo = Context.GetNewTag();
+            Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, tagToJumpOutTo));
+            // push tag to jump in to
+            string methodName = ((IdentifierNameSyntax) node.Expression).Identifier.Text;
+            var method = Context.RootClass.GetMethods().FirstOrDefault(x => x.Identifier.Text == methodName);
+            var tag = Context.GetMethodTag(method); // tag with ID to jump to
+            Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, tag));
+            // enter method
+            Context.Append(EvmInstruction.JUMP);
+            // after method runs, add jumpdest to exit function.
+            Context.Append(new EthSharpAssemblyItem(AssemblyItemType.Tag, tagToJumpOutTo));
+        }
+
+        #region unimplemented
 
         public override void Visit(SyntaxNode node)
         {
@@ -620,11 +626,6 @@ namespace EthSharp.Compiler
         }
 
         public override void VisitInterpolationFormatClause(InterpolationFormatClauseSyntax node)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void VisitInvocationExpression(InvocationExpressionSyntax node)
         {
             throw new NotImplementedException();
         }

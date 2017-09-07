@@ -2,11 +2,9 @@
 
 public class SimpleTest : Contract
 {
-    public UInt256 StoredData { get; private set; }
-
-    public void Increase()
+    public int Test2()
     {
-        StoredData = StoredData + 1;
+        return Test() + 1;
     }
 
     private int Test()
