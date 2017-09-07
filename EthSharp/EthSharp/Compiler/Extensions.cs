@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EthSharp.Hashing;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace EthSharp.Compiler
@@ -13,6 +14,12 @@ namespace EthSharp.Compiler
         public static IList<MethodDeclarationSyntax> GetMethods(this ClassDeclarationSyntax classDeclarationSyntax)
         {
             return classDeclarationSyntax.Members.OfType<MethodDeclarationSyntax>().ToList();
+        }
+
+        public static IList<MethodDeclarationSyntax> GetPublicMethods(this ClassDeclarationSyntax classDeclarationSyntax)
+        {
+            return classDeclarationSyntax.GetMethods()
+                .Where(x => x.Modifiers.Any(y => y.Kind() == SyntaxKind.PublicKeyword)).ToList();
         }
 
         public static IList<PropertyDeclarationSyntax> GetProperties(this ClassDeclarationSyntax classDeclarationSyntax)

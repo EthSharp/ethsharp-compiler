@@ -21,9 +21,22 @@ namespace EthSharp.Compiler
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
+            //Right now only public methods will get here.
+            //Context.MethodBlockEntryPoints.Add(node.Identifier.Text, new EthSharpAssemblyItem(AssemblyItemType.Tag, Context.GetNewTag()));
+
+            //Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, Context.MethodBlockEntryPoints[node.Identifier.Text].Data));
+            //Context.Append(EvmInstruction.JUMP);
+
+            //// fill out code here
+            //node.Body.Accept(this)
+
+            //Create an entry point to the method block.
+
             // TODO: Do something with attributes 
             // TODO: Do something with parameterlist
             node.Body.Accept(this);
+
+            //depending on public or private, changes what to append here
         }
 
         public override void VisitBlock(BlockSyntax node)

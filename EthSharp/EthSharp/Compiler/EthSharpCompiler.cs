@@ -31,29 +31,29 @@ namespace EthSharp.Compiler
             // for now just assume one class
             InitializeContext();
             Dictionary<byte[], PropertyDeclarationSyntax> propertyGetters = RootClass.GetProperties().ToDictionary(x => x.GetGetterAbiSignature(), x => x);
-            Dictionary<byte[], MethodDeclarationSyntax> methods = RootClass.GetMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
-            Dictionary<byte[], EthSharpAssemblyItem> methodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
+            Dictionary<byte[], MethodDeclarationSyntax> methods = RootClass.GetPublicMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
+            Dictionary<byte[], EthSharpAssemblyItem> publicMethodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
             RetrieveFunctionHash();
 
-            // If incoming call data matches get, jump to that function
+            // If incoming call data matches get, jump to that function - TODO: Only public
             foreach (var property in propertyGetters)
             {
-                methodEntryPoints.Add(property.Key, new EthSharpAssemblyItem(AssemblyItemType.Tag, Context.GetNewTag()));
+                publicMethodEntryPoints.Add(property.Key, new EthSharpAssemblyItem(AssemblyItemType.Tag, Context.GetNewTag()));
                 Context.Append(EvmInstruction.DUP1);
                 Context.Append(new UInt256(property.Key));
                 Context.Append(EvmInstruction.EQ);
-                Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, methodEntryPoints[property.Key].Data)); // this should be cleaner
+                Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, publicMethodEntryPoints[property.Key].Data)); // this should be cleaner
                 Context.Append(EvmInstruction.JUMPI);
             }
 
-            // If incoming call data matches function, jump to that function.
-            foreach (var method in methods)
+            // If incoming call data matches function, jump to that function - only public
+            foreach (var method in methods.Where(x=>x.Value.Modifiers.Any(y => y.Kind() == SyntaxKind.PublicKeyword)))
             {
-                methodEntryPoints.Add(method.Key, new EthSharpAssemblyItem(AssemblyItemType.Tag,Context.GetNewTag()));
+                publicMethodEntryPoints.Add(method.Key, new EthSharpAssemblyItem(AssemblyItemType.Tag,Context.GetNewTag()));
                 Context.Append(EvmInstruction.DUP1);
                 Context.Append(new UInt256(method.Key));
                 Context.Append(EvmInstruction.EQ);
-                Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag,methodEntryPoints[method.Key].Data)); // this should be cleaner
+                Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, publicMethodEntryPoints[method.Key].Data)); // this should be cleaner
                 Context.Append(EvmInstruction.JUMPI);
             }
             // bottom of function switch - fail
@@ -61,17 +61,16 @@ namespace EthSharp.Compiler
 
             foreach (var property in propertyGetters)
             {
-                Context.Append(methodEntryPoints[property.Key]);
+                Context.Append(publicMethodEntryPoints[property.Key]);
                 Context.Append(Context.StorageIdentifiers[property.Value.Identifier.Text]); //push data location
                 Context.Append(EvmInstruction.SLOAD); //sload it
                 Context.Append(EvmInstruction.RETURN);//return
             }
 
+            //  actual method compilation happens in here. Lets treat each public function like an entry point
             foreach (var method in methods)
             {
-                Context.Append(methodEntryPoints[method.Key]); // sets destination to jump to from switch
-                // would implement payable and other attributes here
-                // get calldata if necessary
+                Context.Append(publicMethodEntryPoints[method.Key]); // sets destination to jump to from switch
                 method.Value.Accept(SyntaxVisitor); //This should do all the magic!
             }
 

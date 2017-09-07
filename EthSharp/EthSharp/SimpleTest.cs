@@ -8,4 +8,9 @@ public class SimpleTest : Contract
     {
         StoredData = StoredData + 1;
     }
+
+    private int Test()
+    {
+        return 1;
+    }
 }
