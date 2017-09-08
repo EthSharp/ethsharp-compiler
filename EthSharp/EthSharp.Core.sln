@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ethsharp.Core", "EthSharp\EthSharp.Core.csproj", "{8C016E48-27D6-4FAB-9C3F-22D6EC8CECF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EthSharp.Core", "EthSharp\EthSharp.Core.csproj", "{8C016E48-27D6-4FAB-9C3F-22D6EC8CECF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EthSharp.ContractDevelopment.Core", "EthSharp.ContractDevelopment\EthSharp.ContractDevelopment.Core.csproj", "{102E32D0-2ADB-4D51-9177-9715590000F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EthSharp.ContractDevelopment.Core", "EthSharp.ContractDevelopment\EthSharp.ContractDevelopment.Core.csproj", "{102E32D0-2ADB-4D51-9177-9715590000F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EthSharp.Tests", "EthSharp.Tests\EthSharp.Tests.csproj", "{F3FD619B-0D99-4AAC-8C7F-C4535FAB1F13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{102E32D0-2ADB-4D51-9177-9715590000F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{102E32D0-2ADB-4D51-9177-9715590000F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{102E32D0-2ADB-4D51-9177-9715590000F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3FD619B-0D99-4AAC-8C7F-C4535FAB1F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3FD619B-0D99-4AAC-8C7F-C4535FAB1F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3FD619B-0D99-4AAC-8C7F-C4535FAB1F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3FD619B-0D99-4AAC-8C7F-C4535FAB1F13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
