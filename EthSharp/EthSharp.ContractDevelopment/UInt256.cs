@@ -337,9 +337,19 @@ namespace EthSharp.ContractDevelopment
             return new UInt256(left.ToBigInteger() * right);
         }
 
+        public static UInt256 operator *(UInt256 left, UInt256 right)
+        {
+            return new UInt256(left.ToBigInteger() * right.ToBigInteger());
+        }
+
         public static UInt256 operator /(UInt256 dividend, uint divisor)
         {
             return new UInt256(dividend.ToBigInteger() / divisor);
+        }
+
+        public static UInt256 operator /(UInt256 dividend, UInt256 divisor)
+        {
+            return new UInt256(dividend.ToBigInteger() / divisor.ToBigInteger());
         }
 
         public static UInt256 operator <<(UInt256 value, int shift)
