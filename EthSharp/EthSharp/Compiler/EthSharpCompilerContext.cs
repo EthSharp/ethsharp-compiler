@@ -71,7 +71,7 @@ namespace EthSharp.Compiler
                 return MethodBlockEntryPoints[methodName].Data;
 
             UInt256 newTag = GetNewTag();
-            MethodBlockEntryPoints.Add(methodName, new EthSharpAssemblyItem(AssemblyItemType.Tag, GetNewTag()));
+            MethodBlockEntryPoints.Add(methodName, new EthSharpAssemblyItem(AssemblyItemType.Tag, newTag));
             MethodQueue.Enqueue(method);
             return newTag;
         }

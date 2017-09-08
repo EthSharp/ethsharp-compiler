@@ -33,9 +33,6 @@ namespace EthSharp.Compiler
             {
                 statement.Accept(this);
             }
-            // this wont go here any more.
-            if (Context.Assembly.Items.LastOrDefault()?.Instruction != EvmInstruction.RETURN)
-                Context.Append(EvmInstruction.STOP); // Obviously this stops methods from being called internally. Need to work out correct pattern to handle this
         }
 
         public override void VisitExpressionStatement(ExpressionStatementSyntax node)
@@ -55,17 +52,9 @@ namespace EthSharp.Compiler
 
         public override void VisitReturnStatement(ReturnStatementSyntax node)
         {
-            // This currently works for public functions, but when called privately, we actually want to
-            // put the value on the top of the stack and then jump [out]
-
             node.Expression.Accept(this);
-            // need to MSTORE the value currently on top of stack
-            //Context.Append(UInt256.Zero);
-            //Context.Append(EvmInstruction.MSTORE);
-            //// then add values for where it is
-            //Context.Append(0x20);
-            //Context.Append(UInt256.Zero);
-            //Context.Append(EvmInstruction.RETURN);
+            Context.Append(EvmInstruction.SWAP1); // swaps so that place to jump out to is in right place
+            Context.Append(EvmInstruction.JUMP); // jump out of current method - assumes that place to jump to was on stack at start
         }
 
         public override void VisitBinaryExpression(BinaryExpressionSyntax node)

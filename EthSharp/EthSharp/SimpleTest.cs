@@ -2,12 +2,12 @@
 
 public class SimpleTest : Contract
 {
-    public int Test2()
+    public UInt256 Test2()
     {
         return Test() + 1;
     }
 
-    private int Test()
+    private UInt256 Test()
     {
         return 1;
     }

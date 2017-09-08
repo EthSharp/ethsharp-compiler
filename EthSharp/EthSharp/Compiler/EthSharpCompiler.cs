@@ -84,7 +84,20 @@ namespace EthSharp.Compiler
             Context.Append(new EthSharpAssemblyItem(AssemblyItemType.PushTag, internalMethodTag));  // push private jump tag
             Context.Append(EvmInstruction.JUMP);
             Context.Append(new EthSharpAssemblyItem(AssemblyItemType.Tag, tagToJumpOutTo)); // jump back tag
-            // TODO: because public, need to append either return or stop here 
+            if (method.ReturnType.Kind() == SyntaxKind.VoidKeyword)
+            {
+                Context.Append(EvmInstruction.STOP);
+            }
+            else
+            {
+                // need to MSTORE the value currently on top of stack
+                Context.Append(UInt256.Zero);
+                Context.Append(EvmInstruction.MSTORE);
+                // then add values for where it is
+                Context.Append(0x20);
+                Context.Append(UInt256.Zero);
+                Context.Append(EvmInstruction.RETURN);
+            }
         }
 
         private void CompileMethodQueue()
