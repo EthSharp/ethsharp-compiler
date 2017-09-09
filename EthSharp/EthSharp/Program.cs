@@ -16,10 +16,12 @@ namespace EthSharp
     {
         static void Main(string[] args)
         {
-            string source = File.ReadAllText("SimpleTest.cs");
-            var tree = SyntaxFactory.ParseSyntaxTree(source);
-            var evmByteCode = new EthSharpCompiler(tree).CreateByteCode();
-            Console.WriteLine(evmByteCode.ByteCode.ToHexString());
+            while (true)
+            {
+                Console.Write(">>> ");
+                ExecuteCommand(ParseCommand(Console.ReadLine()));
+            }
+
             Console.ReadKey();
         }
 
@@ -45,6 +47,30 @@ namespace EthSharp
                     Console.WriteLine(diagnostic.ToString());
                 }
             }
+        }
+
+        private static void ExecuteCommand(string[] command)
+        {
+            switch (command[0])
+            {
+                case "compile":
+                    string source = File.ReadAllText(command[1]);
+                    var tree = SyntaxFactory.ParseSyntaxTree(source);
+                    var evmByteCode = new EthSharpCompiler(tree).CreateByteCode();
+                    Console.WriteLine(evmByteCode.ByteCode.ToHexString());
+                    break;
+                case "exit":
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Command '" + command[0] + "' unknown.");
+                    break;
+            }
+        }
+
+        private static string[] ParseCommand(string command)
+        {
+            return command.Split(' ');
         }
     }
 }
