@@ -1,19 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Version>1.0.0.0</Version>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\EthSharp.ContractDevelopment\EthSharp.ContractDevelopment.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Properties\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Remove="Properties\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Properties\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.3.0-beta1" />

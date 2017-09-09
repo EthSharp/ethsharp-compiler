@@ -3,15 +3,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Properties\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Remove="Properties\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Properties\**" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="System.Data.HashFunction.Core" Version="2.0.0-ci-00012" />
     <PackageReference Include="System.Data.HashFunction.xxHash" Version="2.0.0-ci-00012" />
   </ItemGroup>
