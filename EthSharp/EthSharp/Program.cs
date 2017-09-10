@@ -16,11 +16,56 @@ namespace EthSharp
     {
         static void Main(string[] args)
         {
-            string source = File.ReadAllText("SimpleTest.cs");
-            var tree = SyntaxFactory.ParseSyntaxTree(source);
-            var evmByteCode = new EthSharpCompiler(tree).CreateByteCode();
-            Console.WriteLine(evmByteCode.ByteCode.ToHexString());
-            Console.ReadKey();
+            Array.Reverse(args); // Stack reads in values backwards
+            Stack<string> arguments = new Stack<string>(args);
+            ArgSettings settings = new ArgSettings();
+            
+            while(arguments.Count != 0)
+            {
+                switch (arguments.Pop())
+                {
+                    case "-i": // Define input file
+                    case "--input":
+                        settings.inputFile = arguments.Pop();
+                        break;
+                    case "-o": // Define output file. If null, just print output to console.
+                    case "--output":
+                        settings.outputFile = arguments.Pop();
+                        break;
+                    case "-h": // Display help info
+                    case "--help":
+                    case "?":
+                        DisplayHelpInfo();
+                        break;
+                }
+            }
+
+            string source;
+            if (settings.inputFile != null)
+            {
+                source = File.ReadAllText(settings.inputFile);
+                var tree = SyntaxFactory.ParseSyntaxTree(source);
+                var evmByteCode = new EthSharpCompiler(tree).CreateByteCode();
+                if(settings.outputFile != null)
+                {
+                    File.WriteAllText(settings.outputFile, evmByteCode.ByteCode.ToHexString());
+                }
+                else
+                {
+                    Console.WriteLine(evmByteCode.ByteCode.ToHexString());
+                }
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("No input file defined.");
+                Environment.Exit(1);
+            }
+        }
+
+        private static void DisplayHelpInfo()
+        {
+            throw new NotImplementedException();
         }
 
         private static void CompileToCSharp(SyntaxTree tree)
@@ -46,5 +91,11 @@ namespace EthSharp
                 }
             }
         }
+    }
+
+    struct ArgSettings
+    {
+        public string inputFile;
+        public string outputFile;
     }
 }
