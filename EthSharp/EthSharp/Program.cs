@@ -65,7 +65,12 @@ namespace EthSharp
 
         private static void DisplayHelpInfo()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Usage: ethsharp -i <INPUTFILE> [OPTIONS]");
+            Console.WriteLine();
+            Console.WriteLine("Option            Long option         Meaning");
+            Console.WriteLine(" -h               --help              Display this help page");
+            Console.WriteLine(" -i <inputfile>   --input             Defines the input file to compile");
+            Console.WriteLine(" -o <outputfile>  --output            Defines the file to put the output in. If not set, the output will just be printed to the console.");
         }
 
         private static void CompileToCSharp(SyntaxTree tree)
