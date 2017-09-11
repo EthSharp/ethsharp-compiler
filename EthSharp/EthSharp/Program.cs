@@ -54,7 +54,6 @@ namespace EthSharp
                 {
                     Console.WriteLine(evmByteCode.ByteCode.ToHexString());
                 }
-                Console.ReadKey();
             }
             else
             {

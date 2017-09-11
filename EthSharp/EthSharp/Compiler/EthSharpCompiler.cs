@@ -26,6 +26,9 @@ namespace EthSharp.Compiler
         {
             // for now just assume one class
             InitializeContext();
+
+            Context.RootClass.Accept(new EthSharpAllowedTypesVisitor()); // parse class and throw exception if any unexpected types used
+
             Dictionary<byte[], PropertyDeclarationSyntax> propertyGetters = Context.RootClass.GetProperties().ToDictionary(x => x.GetGetterAbiSignature(), x => x);
             Dictionary<byte[], MethodDeclarationSyntax> methods = Context.RootClass.GetPublicMethods().ToDictionary(x => x.GetAbiSignature(), x => x);
             Dictionary<byte[], EthSharpAssemblyItem> publicMethodEntryPoints = new Dictionary<byte[], EthSharpAssemblyItem>();
