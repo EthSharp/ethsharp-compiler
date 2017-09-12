@@ -10,16 +10,16 @@ namespace EthSharp.Compiler
 {
     public class EthSharpAllowedTypesVisitor : CSharpSyntaxVisitor
     {
-        private static readonly Dictionary<string, bool> AllowedTypes = new Dictionary<string, bool>
+        private static readonly HashSet<string> AllowedTypes = new HashSet<string>
         {
-            {typeof(UInt256).Name, true}
+            typeof(UInt256).Name
         };
 
-        private string ExceptionMessage => "Type not supported. Currently supported types: " + String.Join(", ", AllowedTypes.Keys);
+        private string ExceptionMessage => "Type not supported. Currently supported types: " + String.Join(", ", AllowedTypes);
 
         private bool TypeAllowed(TypeSyntax type)
         {
-            return AllowedTypes.ContainsKey(type.GetText().ToString().Trim());
+            return AllowedTypes.Contains(type.GetText().ToString().Trim());
         }
 
 
