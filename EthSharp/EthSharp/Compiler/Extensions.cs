@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EthSharp.ContractDevelopment;
 using EthSharp.Hashing;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,6 +26,11 @@ namespace EthSharp.Compiler
         public static IList<PropertyDeclarationSyntax> GetProperties(this ClassDeclarationSyntax classDeclarationSyntax)
         {
             return classDeclarationSyntax.Members.OfType<PropertyDeclarationSyntax>().ToList();
+        }
+
+        public static IList<FieldDeclarationSyntax> GetFields(this ClassDeclarationSyntax fieldDeclarationSyntax)
+        {
+            return fieldDeclarationSyntax.Members.OfType<FieldDeclarationSyntax>().ToList();
         }
 
         public static string GetExternalSignature(this MethodDeclarationSyntax method)
