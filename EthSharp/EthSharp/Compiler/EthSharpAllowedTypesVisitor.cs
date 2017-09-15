@@ -31,7 +31,7 @@ namespace EthSharp.Compiler
 
         private void CheckIfTypeIsAllowed(TypeSyntax type)
         {
-            var typeName = type.GetText().ToString().Trim();
+            var typeName = type.GetText().ToString().Trim(); // TODO: handle primite types aliases, String and string for example
 
             if (!TypeAllowed(typeName))
             {
