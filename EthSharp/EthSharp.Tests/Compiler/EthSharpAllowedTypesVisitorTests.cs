@@ -11,7 +11,7 @@ namespace EthSharp.Tests.Compiler
         [Fact]
         public void can_use_allowed_types()
         {
-            var sut = new EthSharpAllowedTypesVisitor(new HashSet<string> {typeof(string).Name});
+            var sut = new EthSharpAllowedTypesVisitor(new HashSet<string> {typeof(String).Name});
 
             var tree = CSharpSyntaxTree.ParseText(@"
 using EthSharp.ContractDevelopment;
@@ -24,12 +24,12 @@ public class SimpleTest : Contract
     public String Test2(String parameter)
     {
         String x;
-        return Test() + ""1"";
+        return Test() + 1;
     }
 
     private String Test()
     {
-        return ""1"";
+        return 1;
     }
 }");
 
@@ -49,12 +49,12 @@ public class SimpleTest : Contract
     public UInt256 Test2(String parameter)
     {
         String x;
-        return Test() + ""1"";
+        return Test() + 1;
     }
 
     private String Test()
     {
-        return ""1"";
+        return 1;
     }
 }");
             Assert.Throws<Exception>(() => sut.Visit(tree.GetRoot()));
@@ -74,12 +74,12 @@ public class SimpleTest : Contract
     public String Test2(UInt256 parameter)
     {
         String x;
-        return Test() + ""1"";
+        return Test() + 1;
     }
 
     private String Test()
     {
-        return ""1"";
+        return 1;
     }
 }");
             Assert.Throws<Exception>(() => sut.Visit(tree.GetRoot()));
@@ -99,12 +99,12 @@ public class SimpleTest : Contract
     public String Test2(String parameter)
     {
         UInt256 x;
-        return Test() + ""1"";
+        return Test() + 1;
     }
 
     private String Test()
     {
-        return ""1"";
+        return 1;
     }
 }");
             Assert.Throws<Exception>(() => sut.Visit(tree.GetRoot()));
@@ -126,12 +126,12 @@ public class SimpleTest : Contract
     public String Test2(String parameter)
     {
         String x;
-        return Test() + ""1"";
+        return Test() + 1;
     }
 
     private String Test()
     {
-        return ""1"";
+        return 1;
     }
 }");
             Assert.Throws<Exception>(() => sut.Visit(tree.GetRoot()));
@@ -153,12 +153,12 @@ public class SimpleTest : Contract
     public String Test2(String parameter)
     {
         String x;
-        return Test() + ""1"";
+        return Test() + 1;
     }
 
     private String Test()
     {
-        return ""1"";
+        return 1;
     }
 }");
             Assert.Throws<Exception>(() => sut.Visit(tree.GetRoot()));

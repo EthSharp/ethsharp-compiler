@@ -3,7 +3,7 @@
 public class SimpleTest : Contract
 {
     public UInt256 Test2()
-    {        
+    {
         return Test() + 1;
     }
 
