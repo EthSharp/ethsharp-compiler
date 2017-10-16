@@ -1,7 +1,5 @@
 # EthSharp - A C# Compiler for Ethereum Smart Contracts
 
-This compiler is currently in development. Feel free to observe and contribute but do NOT use it for any real use case yet.
+Hey all, this project is now *deprecated*. Unfortunately it was decided that the security risk was too great. It doesn't make sense to try and break up the solidity development community when it is already making huge progress in having strong, tested, secure contracts for current uses like tokens, auctions etc.
 
-This readme will be updated as progress continues and the project comes closer to real-world usability.
-
-If you want to contribute, join our [Slack](https://join.slack.com/t/ethsharp/shared_invite/MjM3ODAyNDc1MzM1LTE1MDQ2NjA1MzMtN2E2YjRhZGNhNQ).
+If you want to get in touch, please use LinkedIn, Twitter, or email me directly!
